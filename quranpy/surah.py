@@ -102,9 +102,11 @@ class Verse:
 class Page:
     __slots__ = ('edition', 'data', 'number', 'num_verses', 'num_surahs')
 
-    def __init__(self,
-                 page: int,
-                 edition: Optional[Editions] = Editions.sahih_international):
+    def __init__(
+            self,
+            page: int,
+            edition: Optional[Editions] = Editions.sahih_international
+    ):
         if page > 604:
             raise IncorrectPageNumber("Page number should be betwen 1 and 604")
         data = request(_URL.format('page', page, edition.value)).json()
