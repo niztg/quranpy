@@ -46,3 +46,41 @@ print(ayatul_kursi)
 ```
 Allah! There is no deity save Him, the Alive, the Eternal. Neither slumber nor sleep overtaketh Him. Unto Him belongeth whatsoever is in the heavens and whatsoever is in the earth. Who is he that intercedeth with Him save by His leave? He knoweth that which is in front of them and that which is behind them, while they encompass nothing of His knowledge save what He will. His throne includeth the heavens and the earth, and He is never weary of preserving them. He is the Sublime, the Tremendous.
 ```
+
+**Exceptions:**
+```py
+while True:
+    msg = input("Enter a verse you want to see: ")
+    try:
+        verse = quranpy.Verse(msg, ediition=quranpy.Editions.pickthall)
+    except quranpy.IncorrectAyahArguments as error:
+        print(error)
+        continue
+    print(verse)
+```
+
+*Returns:*
+```
+Enter a verse you want to see: not a real verse
+Please specify an Ayah number (1 to 6236) or a reference in the format Surah:Ayat (2:255).
+Enter a verse you want to see: 
+```
+
+**Editions:**
+There are 137 editions of Qur'an which can all be found [here](https://github.com/niztg/quranpy/blob/master/quranpy/editions.py)
+
+Usage:
+```py
+quranpy.Surah(1, edition=quranpy.Editions.edition) # `edition` here is being replaced
+```
+
+*Notable Editions:*
+- sahih_international
+- yusufali
+- pickthall
+- korean
+- japanese
+- thai
+- bengali
+- jalalayn
+- tamil
