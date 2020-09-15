@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Edition(Enum):
+class Editions(Enum):
     muyassar = "ar.muyassar"
     mammadaliyev = "ar.mammadaliyev"
     musayev = "az.musayev"
