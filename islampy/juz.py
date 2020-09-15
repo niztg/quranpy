@@ -1,0 +1,2 @@
+class Juz:
+    pass
