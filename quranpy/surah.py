@@ -11,7 +11,7 @@ SURAH_URL = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}"
 
 class Surah:
     """Represents a Surah of the Qur'an"""
-    __slots__ = ('data', 'number', 'arabic_name', 'name', 'translation', 'period', 'num_verses')
+    __slots__ = ('edition', 'chapter', 'data', 'number', 'arabic_name', 'name', 'translation', 'period', 'num_verses',)
 
     def __init__(
             self,
@@ -22,6 +22,8 @@ class Surah:
         if data.get('code') != 200:
             raise SurahNotFound(
                 "%s is not a chapter number in the Qur'an. The number must be inbetween 1 and 114" % chapter)
+        self.edition = edition
+        self.chapter = chapter
         self.data = data['data'][0]
         self.number = self.data.get('number')
         self.arabic_name = self.data.get('name')
@@ -52,14 +54,14 @@ class Surah:
             last: Optional[int] = None
     ):
         if not last:
-            return Verse(f"{self.number}:{first}")
+            return Verse(f"{self.chapter}:{first}", self.edition)
         else:
             to_return = list()
             if first > last:
                 first = last
                 last = first
             for verse in range(first, last + 1):
-                to_return.append(Verse(f"{self.number}:{verse}"))
+                to_return.append(Verse(f"{self.chapter}:{verse}", self.edition))
         return to_return
 
 
