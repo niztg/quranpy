@@ -1,4 +1,4 @@
-from .surah import Surah, Verse
+from .quran import *
 from .exceptions import SurahNotFound, IncorrectAyahArguments
 from .editions import Editions
 

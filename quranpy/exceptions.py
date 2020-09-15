@@ -12,3 +12,19 @@ class IncorrectAyahArguments(Exception):
 
     def __str__(self):
         return self.message
+
+
+class IncorrectPageNumber(Exception):
+    def __init__(self, message="That page doesn't exist!"):
+        self.message = message
+
+    def __str__(self):
+        return self.message
+
+
+class IncorrectJuzNumber(Exception):
+    def __init__(self, message="That juz doesn't exist!"):
+        self.message = message
+
+    def __str__(self):
+        return self.message
