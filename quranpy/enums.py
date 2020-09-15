@@ -257,6 +257,3 @@ class Editions(Enum):
     wordbyword2 = "quran-wordbyword-2"
     unicode = "quran-unicode"
     uthmani_quran_academy = "quran-uthmani-quran-academy"
-
-
-
