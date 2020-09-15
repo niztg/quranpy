@@ -38,7 +38,7 @@ Nor is there to Him any equivalent."
 <hr>
 
 ```py
-ayatul_kursi = quranpy.Verse("2:255", ediition=quranpy.Editions.pickthall) # Will show the Pickthall translation
+ayatul_kursi = quranpy.Verse("2:255") # Verse may also take an integer as it's first argument. `Verse(262)` would accomplish the same thing here.
 print(ayatul_kursi)
 ```
 
