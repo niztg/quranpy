@@ -3,7 +3,7 @@ from enum import Enum
 __all__ = ('Chapters', 'Editions')
 
 class Chapters(Enum):
-    fatihah =   1
+    fatihah =  1
     baqarah =  2
     imran =    3
     nisa =     4
