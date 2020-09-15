@@ -13,7 +13,10 @@ You can then create an instance of a Surah or Verse.
 
 *Example:*
 ```py
-al_fatiha = quranpy.Surah(1, edition=quranpy.Editions.sahih_international)
+al_fatiha = quranpy.Surah(
+    chapter=quranpy.Chapters.fatiha, 
+    edition=quranpy.Editions.sahih_international
+)
 print(al_fatiha)
 ```
 
@@ -23,7 +26,7 @@ Surah Al-Faatiha - The Opening
 ```
 
 ```py
-al_ikhlas = quranpy.Surah(112) # Sahih International is the default edition
+al_ikhlas = quranpy.Surah(112, edition=quranpy.Editions.sahih_international)
 verses = al_ikhlas.show_verses(1, 4) # Will show verses 1-4. If you only want one verse, the second argument is not necessary
 print("\n".join(map(str, verses)))
 ```
