@@ -84,3 +84,4 @@ quranpy.Surah(1, edition=quranpy.Editions.edition) # `edition` here is being rep
 - bengali
 - jalalayn
 - tamil
+- english_transliteration
