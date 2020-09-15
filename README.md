@@ -9,7 +9,7 @@ This package uses the [Al Quran Cloud](https://alquran.cloud/) API to bring you 
 import quranpy
 ```
 
-You can then create an instance of a Surah or Verse.
+You can then create an instance of a Surah, Verse, Page, Juz or Search.
 
 *Example:*
 ```py
@@ -74,7 +74,7 @@ There are 137 editions of Qur'an which can all be found [here](https://github.co
 
 Usage:
 ```py
-quranpy.Surah(1, edition=quranpy.Editions.edition) # `edition` here is being replaced
+quranpy.Verse("93:7", edition=quranpy.Editions.edition) # `edition` here is being replaced
 ```
 
 *Notable Editions:*
