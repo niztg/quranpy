@@ -66,7 +66,7 @@ class Verse:
     def __init__(
             self,
             ayah,
-            ediition: Editions = Editions.sahih_international
+            ediition: Optional[Editions] = Editions.sahih_international
     ):
         data = request(AYAH_URL.format(ayah, ediition.value)).json()
         if data.get('code') != 200:
