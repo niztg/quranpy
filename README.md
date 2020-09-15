@@ -75,7 +75,7 @@ quranpy.Surah(1, edition=quranpy.Editions.edition) # `edition` here is being rep
 ```
 
 *Notable Editions:*
-- sahih_international
+- sahih_international (Default)
 - yusufali
 - pickthall
 - korean
