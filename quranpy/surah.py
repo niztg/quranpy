@@ -13,7 +13,7 @@ class Surah:
     def __init__(
             self,
             chapter: int,
-            edition: Editions = Editions.sahih_international
+            edition: Optional[Editions] = Editions.sahih_international
     ):
         data = request(SURAH_URL.format(chapter, edition.value)).json()
         if data.get('code') != 200:
