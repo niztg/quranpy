@@ -24,7 +24,7 @@ Surah Al-Faatiha - The Opening
 
 ```py
 al_ikhlas = quranpy.Surah(112) # Sahih International is the default edition
-verses = al_ikhlas.show_verses(1, 4) # Will show verses 1-4
+verses = al_ikhlas.show_verses(1, 4) # Will show verses 1-4. If you only want one verse, the second number is not necessary
 print("\n".join(map(str, verses)))
 ```
 
