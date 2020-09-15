@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../islampy/.idea/islampy.iml" filepath="$PROJECT_DIR$/../islampy/.idea/islampy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../quranpy/.idea/quranpy.iml" filepath="$PROJECT_DIR$/../quranpy/.idea/quranpy.iml" />
     </modules>
   </component>
 </project>
