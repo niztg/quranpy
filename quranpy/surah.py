@@ -188,7 +188,7 @@ class Search:
         for ayah in self.data.get('matches'):
             verse = ayah['number']
             try:
-                ayahs.append(Verse(verse, Editions.sahih_international))
+                ayahs.append(Verse(verse, self.edition))
             except:
                 break
         return ayahs
