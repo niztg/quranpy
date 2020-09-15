@@ -3,12 +3,15 @@ from quranpy.exceptions import SurahNotFound, IncorrectAyahArguments
 from requests import get as request
 from typing import Optional
 
+__all__ = ('Surah', 'Verse')
+
 AYAH_URL = "http://api.alquran.cloud/v1/ayah/{0}/{1}"
 SURAH_URL = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}"
 
 
 class Surah:
     """Represents a Surah of the Qur'an"""
+    __slots__ = ('data', 'number', 'arabic_name', 'name', 'translation', 'period', 'num_verses')
 
     def __init__(
             self,
@@ -62,6 +65,7 @@ class Surah:
 
 class Verse:
     """Represents an ayah/verse of the Qur'an"""
+    __slots__ = ('data', 'number', 'text', 'number_in_surah')
 
     def __init__(
             self,
