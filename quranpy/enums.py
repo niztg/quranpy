@@ -4,7 +4,7 @@ __all__ = ('Chapters', 'Editions')
 
 
 class Chapters(Enum):
-    fatihah = 1
+    fatiha = 1
     baqarah = 2
     imran = 3
     nisa = 4
