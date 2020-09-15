@@ -1,2 +1,2 @@
-# islampy
-Python Package to interact with the Religion of Peace!
+# quranpy
+Python Package to interact with the Glorious Qur'an!
