@@ -207,11 +207,13 @@ def show_verses(
         if (verse < 1) or (verse > 6236):
             raise IncorrectAyahArguments("Ayah must be inbetween 1 and 6236")
     except:
-        if len((_data := format.split(":"))) != 2:
+        _data = format.split(":")
+        if len(_data) != 2:
             raise IncorrectAyahArguments(
                 "Please enter your ayahs in the following format: 2:255 (For Surah Baqarah verse 255)"
             )
-        if len((_range := _data[1].split("-"))) != 1:
+        _range = _data[1].split("-")
+        if len(_range) != 1:
             if len(_range) != 2:
                 raise IncorrectAyahArguments(
                     "Please enter your ayahs in the following format: 1:1-4 (For verses 1-4 of Surah Fatiha)"
@@ -235,7 +237,8 @@ def show_verses(
         return data['data']['text']
     else:
         data = request(verse).json()
-        if not isinstance((ayahs := data['data'][0]['ayahs']), list):
+        ayahs = data['data'][0]['ayahs']
+        if not isinstance(ayahs, list):
             raise IncorrectAyahArguments(ayahs)
         else:
             to_return = list()
