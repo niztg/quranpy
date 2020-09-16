@@ -9,11 +9,14 @@ This package uses the [Al Quran Cloud](https://alquran.cloud/) API to bring you 
 import quranpy
 ```
 
-You can then create an instance of a Surah or Verse.
+You can then create an instance of a Surah, Verse, Page, Juz or Search.
 
 *Example:*
 ```py
-al_fatiha = quranpy.Surah(1, edition=quranpy.Editions.sahih_international)
+al_fatiha = quranpy.Surah(
+    chapter=quranpy.Chapters.fatiha, 
+    edition=quranpy.Editions.sahih_international
+)
 print(al_fatiha)
 ```
 
@@ -23,7 +26,7 @@ Surah Al-Faatiha - The Opening
 ```
 
 ```py
-al_ikhlas = quranpy.Surah(112) # Sahih International is the default edition
+al_ikhlas = quranpy.Surah(112, edition=quranpy.Editions.sahih_international)
 verses = al_ikhlas.show_verses(1, 4) # Will show verses 1-4. If you only want one verse, the second argument is not necessary
 print("\n".join(map(str, verses)))
 ```
@@ -71,7 +74,7 @@ There are 137 editions of Qur'an which can all be found [here](https://github.co
 
 Usage:
 ```py
-quranpy.Surah(1, edition=quranpy.Editions.edition) # `edition` here is being replaced
+quranpy.Verse("93:7", edition=quranpy.Editions.edition) # `edition` here is being replaced
 ```
 
 *Notable Editions:*
