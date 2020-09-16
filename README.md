@@ -45,7 +45,7 @@ print(al_lail.period)
 print(al_lail.show_verses(1, 3))
 ```
 
-```py
+```
 Surah Al-Lail - The Night
 92
 سورة الليل
@@ -54,3 +54,26 @@ The Night
 Meccan
 [By the night enshrouding, And the day resplendent, And Him Who hath created male and female,]
 ```
+
+<hr>
+
+<h3>Search for terms which appear in the Qur'an</h3>
+      
+```py
+results = quranpy.Search(
+      term="Moses",
+      edition=quranpy.Editions.yusufali,
+      surah=quranpy.Chapters.anbiya
+)
+print(results)
+print(results.verses)
+```
+
+```
+2 count(s) of "Moses" in Surah Al-Anbiyaa
+[In the past We granted to Moses and Aaron the criterion (for judgment), and a Light and a Message for those who would do right,-, Before this We wrote in the Psalms, after the Message (given to Moses): My servants the righteous, shall inherit the earth."]
+```
+
+For more information, [read the documentation](https://www.youtube.com/watch?v=oHg5SJYRHA0)
+
+Assalamwalaikum warahmatullahi wa barakatuhu!
