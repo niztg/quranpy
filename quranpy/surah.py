@@ -19,7 +19,7 @@ class Surah:
             edition: Optional[Editions] = Editions.sahih_international
     ):
         if isinstance(chapter, int):
-            if chapter > 114:
+            if (chapter > 114) or (chapter < 1):
                 raise SurahNotFound(
                     "%s is not a chapter number in the Qur'an. The number must be inbetween 1 and 114" % chapter)
         else:
@@ -135,7 +135,7 @@ class Juz:
             number: int,
             edition: Optional[Editions] = Editions.sahih_international
     ):
-        if number > 30:
+        if (number > 30) or (number < 1):
             raise IncorrectJuzNumber("Juz number should be inbetween 1 and 30.")
         data = request(_URL.format('juz', number, edition.value)).json()
         self.edition = edition
@@ -194,3 +194,52 @@ class Search:
             except:
                 break
         return ayahs
+
+
+def show_verses(
+        format: Union[int, str],
+        edition: Optional[Editions] = Editions.sahih_international
+):
+    # this doesn't return a list of the Verse object, it just returns text
+    # good for when you just want the verse and nothing else
+    try:
+        verse = int(format)
+        if (verse < 1) or (verse > 6236):
+            raise IncorrectAyahArguments("Ayah must be inbetween 1 and 6236")
+    except:
+        if len((_data := format.split(":"))) != 2:
+            raise IncorrectAyahArguments(
+                "Please enter your ayahs in the following format: 2:255 (For Surah Baqarah verse 255)"
+            )
+        if len((_range := _data[1].split("-"))) != 1:
+            if len(_range) != 2:
+                raise IncorrectAyahArguments(
+                    "Please enter your ayahs in the following format: 1:1-4 (For verses 1-4 of Surah Fatiha)"
+                )
+            else:
+                offset, limit = [int(i) for i in _range]
+                if offset > limit:
+                    offset = limit
+                    limit = offset
+                verse = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}?offset={2}&limit={3}".format(_data[0],
+                                                                                                         edition.value,
+                                                                                                         offset - 1,
+                                                                                                         limit)
+        else:
+            verse = f"{_data[0]}:{_data[1]}"
+    if isinstance(verse, int) or check_format(verse):
+        data = request(_URL.format('ayah', verse, edition.value)).json()
+        return data['data']['text']
+    else:
+        data = request(verse).json()
+        if not isinstance((ayahs := data['data'][0]['ayahs']), list):
+            raise IncorrectAyahArguments(ayahs)
+        else:
+            to_return = list()
+            for ayah in ayahs:
+                to_return.append(ayah['text'])
+        return to_return
+
+
+def check_format(text: str) -> bool:
+    return len(text.split(":")) == 2 and not text.startswith("http")

@@ -1,5 +1,6 @@
 __all__ = ('SurahNotFound', 'IncorrectAyahArguments', 'IncorrectPageNumber', 'IncorrectJuzNumber', 'SearchError')
 
+
 class SurahNotFound(Exception):
     def __init__(self, message="That Surah doesn't exist!"):
         self.message = message
@@ -38,3 +39,4 @@ class SearchError(Exception):
 
     def __str__(self):
         return self.message
+
