@@ -161,14 +161,15 @@ class Search:
     def __init__(
             self,
             term: str,
-            surah: Optional[Surah] = None,
+            surah: Optional[Union[int, Chapters]] = None,
             edition: Optional[Editions] = Editions.sahih_international
     ):
         self._surah = surah
         if not surah:
             surah = "all"
         else:
-            surah = surah.number
+            if isinstance(surah, Chapters):
+                surah = surah.value
         try:
             data = request(SEARCH_URL.format(term, surah, edition.value)).json()
         except:
@@ -180,7 +181,7 @@ class Search:
 
     def __repr__(self):
         if self._surah:
-            return f"{self.count} count(s) of \"{self.term}\" in {self._surah}"
+            return f"{self.count} count(s) of \"{self.term}\" in Surah {self.data['matches'][0]['surah']['englishName']}"
         else:
             return f"{self.count} count(s) of \"{self.term}\" in the Qur'an"
 
@@ -197,17 +198,17 @@ class Search:
 
 
 def show_verses(
-        format: Union[int, str],
+        ayah: Union[int, str],
         edition: Optional[Editions] = Editions.sahih_international
 ):
     # this doesn't return a list of the Verse object, it just returns text
     # good for when you just want the verse and nothing else
     try:
-        verse = int(format)
+        verse = int(ayah)
         if (verse < 1) or (verse > 6236):
             raise IncorrectAyahArguments("Ayah must be inbetween 1 and 6236")
     except:
-        _data = format.split(":")
+        _data = ayah.split(":")
         if len(_data) != 2:
             raise IncorrectAyahArguments(
                 "Please enter your ayahs in the following format: 2:255 (For Surah Baqarah verse 255)"
