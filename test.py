@@ -8,4 +8,4 @@ nisa = quranpy.Surah(
 )
 print(nisa.translation)
 print(results.verses)
-print(quranpy.show_verses("12:1-4", quranpy.Editions.english_transliteration))
+print("\n".join(quranpy.show_verses("112:2-4", quranpy.Editions.sahih_international)))

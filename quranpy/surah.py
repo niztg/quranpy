@@ -217,7 +217,10 @@ def show_verses(
                     "Please enter your ayahs in the following format: 1:1-4 (For verses 1-4 of Surah Fatiha)"
                 )
             else:
-                offset, limit = [int(i) for i in _range]
+                try:
+                    offset, limit = list(map(int, _range))
+                except ValueError:
+                    raise IncorrectAyahArguments("You may not use any words to define your ayah!") from ValueError
                 if offset > limit:
                     offset = limit
                     limit = offset
