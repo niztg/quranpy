@@ -10,7 +10,8 @@ import quranpy
 
 **Features**:
 
-*Get verses of the Qur'an on demand*
+<h3>Get verses of the Qur'an on demand</h3>
+
 ```py
 verses = quranpy.show_verses(
       ayah="112:2-4",
@@ -23,8 +24,13 @@ print(verses)
 ```py
 ['Allah, the Eternal Refuge.', 'He neither begets nor is born,', 'Nor is there to Him any equivalent."']
 ```
+
 <hr>
-*Easy info on Surahs of the Qur'an*
+
+
+
+<h3>Easy info on Surahs of the Qur'an</h3>
+
 ```py
 al_lail = quranpy.Surah(
       chapter=quranpy.Chapters.layl,
