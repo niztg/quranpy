@@ -42,7 +42,7 @@ print(al_lail.arabic_name)
 print(al_lail.name)
 print(al_lail.translation)
 print(al_lail.period)
-print(al_lail.show_verses(1, 3))
+print(al_lail.show_verses("1-3"))
 ```
 
 ```
