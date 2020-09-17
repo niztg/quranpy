@@ -70,7 +70,7 @@ print(results.verses)
 ```
 
 ```
-2 count(s) of "Moses" in Surah Al-Anbiyaa
+2 count(s) of "Moses" in Surah Al-Anbiyaa (in this edition)
 [In the past We granted to Moses and Aaron the criterion (for judgment), and a Light and a Message for those who would do right,-, Before this We wrote in the Psalms, after the Message (given to Moses): My servants the righteous, shall inherit the earth."]
 ```
 
