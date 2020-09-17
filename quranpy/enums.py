@@ -9,8 +9,8 @@ class Chapters(Enum):
     imran = 3
     nisa = 4
     maidah = 5
-    anam = 6
-    araf = 7
+    anaam = 6
+    araaf = 7
     anfal = 8
     tawbah = 9
     yunus = 10
@@ -20,15 +20,15 @@ class Chapters(Enum):
     ibrahim = 14
     hijr = 15
     nahl = 16
-    isra = 17
+    israa = 17
     kahf = 18
     maryam = 19
     taha = 20
-    anbiya = 21
+    anbiyaa = 21
     hajj = 22
     muminun = 23
     nur = 24
-    furqan = 25
+    furqaan = 25
     shuara = 26
     naml = 27
     qasas = 28
@@ -37,7 +37,7 @@ class Chapters(Enum):
     luqman = 31
     sajda = 32
     ahzab = 33
-    saba = 34
+    sabaa = 34
     fatir = 35
     yasin = 36
     saffat = 37
@@ -48,7 +48,7 @@ class Chapters(Enum):
     shoora = 42
     zukhruf = 43
     dukhan = 44
-    jathiya = 45
+    jathiyaa = 45
     ahqaaf = 46
     muhammad = 47
     fath = 48
@@ -257,5 +257,5 @@ class Editions(Enum):
     mazhonggang = "zh.mazhonggang"
     aymanswoaid = "ar.aymanswoaid"
     wordbyword2 = "quran-wordbyword-2"
-    unicode = "quran-unicode"
+    arabic = "quran-unicode"
     uthmani_quran_academy = "quran-uthmani-quran-academy"

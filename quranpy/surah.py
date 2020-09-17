@@ -11,7 +11,7 @@ SURAH_URL = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}"
 
 
 class Surah:
-    __slots__ = ('data', 'edition', 'chapter', 'number', 'arabic_name', 'name', 'translation', 'period', 'num_verses',)
+    __slots__ = ('data', 'edition', 'chapter', 'number', 'arabic_name', 'name', 'translation', 'period', 'num_verses', 'str_verses')
 
     def __init__(
             self,
@@ -34,6 +34,7 @@ class Surah:
         self.translation = self.data.get('englishNameTranslation')
         self.period = self.data.get('revelationType')
         self.num_verses = self.data.get('numberOfAyahs')
+        self.str_verses = [verse['text'] for verse in self.data.get('ayahs')]
 
     def __repr__(self):
         return f"Surah {self.name} - {self.translation}"
@@ -51,19 +52,80 @@ class Surah:
 
     def show_verses(
             self,
-            first: int,
-            last: Optional[int] = None
+            ayah: Union[int, str],
     ):
-        if not last:
-            return [Verse(f"{self.chapter}:{first}", self.edition)]
+        try:
+            verse = int(ayah)
+            if (verse < 1) or (verse > 6236):
+                raise IncorrectAyahArguments("Ayah must be inbetween 1 and 6236")
+        except:
+            _range = ayah.split("-")
+            if len(_range) != 1:
+                if len(_range) != 2:
+                    raise IncorrectAyahArguments(
+                        "Please enter your ayahs in the following format: 1:1-4 (For verses 1-4 of Surah Fatiha)"
+                    )
+                else:
+                    verse = list()
+                    try:
+                        offset, limit = list(map(int, _range))
+                    except ValueError:
+                        raise IncorrectAyahArguments("You may not use any words to define your ayah!") from ValueError
+                    if offset > limit:
+                        offset = limit
+                        limit = offset
+                    for x in range(offset, limit+1):
+                        verse.append(Verse(f"{self.number}:{x}", self.edition))
+            else:
+                verse = Verse(f"{self.number}:{ayah}", self.edition)
+        if isinstance(verse, int):
+            return Verse(verse)
         else:
-            to_return = list()
-            if first > last:
-                first = last
-                last = first
-            for verse in range(first, last + 1):
-                to_return.append(Verse(f"{self.chapter}:{verse}", self.edition))
-        return to_return
+            return verse
+
+    def show_str_verses(
+            self,
+            ayah: Union[int, str],
+    ):
+        try:
+            verse = int(ayah)
+            if (verse < 1) or (verse > 6236):
+                raise IncorrectAyahArguments("Ayah must be inbetween 1 and 6236")
+        except:
+            _range = ayah.split("-")
+            if len(_range) != 1:
+                if len(_range) != 2:
+                    raise IncorrectAyahArguments(
+                        "Please enter your ayahs in the following format: 1:1-4 (For verses 1-4 of Surah Fatiha)"
+                    )
+                else:
+                    try:
+                        offset, limit = list(map(int, _range))
+                    except ValueError:
+                        raise IncorrectAyahArguments("You may not use any words to define your ayah!") from ValueError
+                    if offset > limit:
+                        offset = limit
+                        limit = offset
+                    verse = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}?offset={2}&limit={3}".format(self.number,
+                                                                                                             self.edition.value,
+                                                                                                             offset - 1,
+                                                                                                             limit)
+            else:
+                verse = f"{self.number}:{ayah}"
+        if isinstance(verse, int) or check_format(verse):
+            data = request(_URL.format('ayah', verse, self.edition.value)).json()
+            return data['data']['text']
+        else:
+            data = request(verse).json()
+            ayahs = data['data'][0]['ayahs']
+            if not isinstance(ayahs, list):
+                raise IncorrectAyahArguments(ayahs)
+            else:
+                to_return = list()
+                for ayah in ayahs:
+                    to_return.append(ayah['text'])
+            return to_return
+
 
 
 class Verse:
@@ -156,7 +218,7 @@ class Juz:
 
 
 class Search:
-    __slots__ = ('_surah', 'term', 'edition', 'data', 'count')
+    __slots__ = ('_surah', 'term', 'edition', 'data', 'count', 'str_verses')
 
     def __init__(
             self,
@@ -178,12 +240,13 @@ class Search:
         self.edition = edition
         self.data = data['data']
         self.count = self.data.get('count')
+        self.str_verses = [verse['text'] for verse in self.data.get('matches')]
 
     def __repr__(self):
         if self._surah:
-            return f"{self.count} count(s) of \"{self.term}\" in Surah {self.data['matches'][0]['surah']['englishName']}"
+            return f"{self.count} count(s) of \"{self.term}\" in Surah {self.data['matches'][0]['surah']['englishName']} (in this edition)"
         else:
-            return f"{self.count} count(s) of \"{self.term}\" in the Qur'an"
+            return f"{self.count} count(s) of \"{self.term}\" in the Qur'an (in this edition)"
 
     @property
     def verses(self) -> List[Verse]:
