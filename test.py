@@ -1,8 +1,12 @@
 import quranpy
 
-# print(results)
-# print(results.verses)
-
+results = quranpy.Search(
+      term="Moses",
+      surah=quranpy.Chapters.anbiyaa
+)
+print(results)
+print(results.verses[0].position)
+print("_____________________________________")
 anfal = quranpy.Surah(
       quranpy.Chapters.anfal,
       quranpy.Editions.sahih_international

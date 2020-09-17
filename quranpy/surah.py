@@ -129,7 +129,7 @@ class Surah:
 
 
 class Verse:
-    __slots__ = ('data', 'edition', 'number', 'text', 'number_in_surah')
+    __slots__ = ('data', 'edition', 'number', 'text', 'number_in_surah', 'position')
 
     def __init__(
             self,
@@ -144,6 +144,7 @@ class Verse:
         self.number = self.data.get('number')
         self.text = self.data.get('text')
         self.number_in_surah = self.data.get('numberInSurah')
+        self.position = f"{self.data['surah']['number']}:{self.number_in_surah}"
 
     def __repr__(self):
         return self.text
