@@ -2,7 +2,8 @@ import quranpy
 
 results = quranpy.Search(
       term="Moses",
-      surah=quranpy.Chapters.anbiyaa
+      surah=quranpy.Chapters.anbiyaa,
+      edition=quranpy.Editions.yusufali
 )
 print(results)
 print(results.verses[0].position)
