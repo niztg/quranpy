@@ -26,7 +26,10 @@ class Surah:
             chapter = chapter.value
         data = request(SURAH_URL.format(chapter, edition.value)).json()
         self.data = data['data'][0]
-        self.chapter = chapter
+        if isinstance(chapter, Chapters):
+            self.chapter = chapter.value
+        else:
+            self.chapter = chapter
         self.edition = edition
         self.number = self.data.get('number')
         self.arabic_name = self.data.get('name')
@@ -75,13 +78,13 @@ class Surah:
                         offset = limit
                         limit = offset
                     for x in range(offset, limit+1):
-                        verse.append(Verse(f"{self.number}:{x}", self.edition))
+                        verse.append(Verse(f"{self.chapter}:{x}", self.edition))
             else:
-                verse = Verse(f"{self.number}:{ayah}", self.edition)
+                verse = [Verse(f"{self.chapter}:{ayah}", self.edition)]
         if isinstance(verse, int):
-            return Verse(verse)
+            return [Verse(f"{self.chapter}:{verse}")]
         else:
-            return verse
+            return list(verse)
 
     def show_str_verses(
             self,
@@ -106,15 +109,18 @@ class Surah:
                     if offset > limit:
                         offset = limit
                         limit = offset
-                    verse = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}?offset={2}&limit={3}".format(self.number,
+                    verse = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}?offset={2}&limit={3}".format(self.chapter,
                                                                                                              self.edition.value,
                                                                                                              offset - 1,
                                                                                                              limit)
             else:
-                verse = f"{self.number}:{ayah}"
-        if isinstance(verse, int) or check_format(verse):
+                verse = f"{self.chapter}:{ayah}"
+        if isinstance(verse, int):
+            data = request(_URL.format('ayah', f"{self.number}:{verse}", self.edition.value)).json()
+            return [data['data']['text']]
+        elif check_format(verse):
             data = request(_URL.format('ayah', verse, self.edition.value)).json()
-            return data['data']['text']
+            return [data['data']['text']]
         else:
             data = request(verse).json()
             ayahs = data['data'][0]['ayahs']
@@ -138,7 +144,7 @@ class Verse:
     ):
         data = request(_URL.format('ayah', ayah, edition.value)).json()
         if data.get('code') != 200:
-            raise IncorrectAyahArguments(data.get('data'))
+            raise IncorrectAyahArguments(f"Verse {ayah} of the quran does not exist!")
         self.data = data['data']
         self.edition = edition
         self.number = self.data.get('number')
@@ -299,7 +305,7 @@ def show_verses(
             verse = f"{_data[0]}:{_data[1]}"
     if isinstance(verse, int) or check_format(verse):
         data = request(_URL.format('ayah', verse, edition.value)).json()
-        return data['data']['text']
+        return [data['data']['text']]
     else:
         data = request(verse).json()
         ayahs = data['data'][0]['ayahs']
