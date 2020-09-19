@@ -22,14 +22,12 @@ class Surah:
             if (chapter > 114) or (chapter < 1):
                 raise SurahNotFound(
                     "%s is not a chapter number in the Qur'an. The number must be inbetween 1 and 114" % chapter)
+            self.chapter = chapter
         else:
             chapter = chapter.value
-        data = request(SURAH_URL.format(chapter, edition.value)).json()
-        self.data = data['data'][0]
-        if isinstance(chapter, Chapters):
-            self.chapter = chapter.value
-        else:
             self.chapter = chapter
+        data = request(SURAH_URL.format(self.chapter, edition.value)).json()
+        self.data = data['data'][0]
         self.edition = edition
         self.number = self.data.get('number')
         self.arabic_name = self.data.get('name')
@@ -164,11 +162,11 @@ class Verse:
 
     @property
     def juz(self):
-        return Juz(self.data['juz'])
+        return Juz(self.data['juz'], self.edition)
 
     @property
     def page(self):
-        return Page(self.data['page'])
+        return Page(self.data['page'], self.edition)
 
 
 class Page:
