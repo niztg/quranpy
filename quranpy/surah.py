@@ -78,7 +78,10 @@ class Surah:
                         offset = limit
                         limit = offset
                     for x in range(offset, limit+1):
-                        verse.append(Verse(f"{self.chapter}:{x}", self.edition))
+                        try:
+                            verse.append(Verse(f"{self.chapter}:{x}", self.edition))
+                        except:
+                            break
             else:
                 verse = [Verse(f"{self.chapter}:{ayah}", self.edition)]
         if isinstance(verse, int):
