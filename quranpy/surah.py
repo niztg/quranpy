@@ -93,8 +93,8 @@ class Surah:
     ):
         try:
             verse = int(ayah)
-            if (verse < 1) or (verse > 6236):
-                raise IncorrectAyahArguments("Ayah must be inbetween 1 and 6236")
+            if (verse < 1) or (verse > len(self.str_verses)):
+                raise IncorrectAyahArguments("Ayah must be inbetween 1 and %s" % len(self.str_verses))
         except:
             _range = ayah.split("-")
             if len(_range) != 1:
@@ -107,31 +107,14 @@ class Surah:
                         offset, limit = list(map(int, _range))
                     except ValueError:
                         raise IncorrectAyahArguments("You may not use any words to define your ayah!") from ValueError
-                    if offset > limit:
-                        offset = limit
-                        limit = offset
-                    verse = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}?offset={2}&limit={3}".format(self.chapter,
-                                                                                                             self.edition.value,
-                                                                                                             offset - 1,
-                                                                                                             limit)
+                    return list(self.str_verses[offset-1:limit])
             else:
-                verse = f"{self.chapter}:{ayah}"
+                try:
+                    return [self.str_verses[int(ayah)-1]]
+                except Exception as error:
+                    raise IncorrectAyahArguments() from error
         if isinstance(verse, int):
-            data = request(_URL.format('ayah', f"{self.number}:{verse}", self.edition.value)).json()
-            return [data['data']['text']]
-        elif check_format(verse):
-            data = request(_URL.format('ayah', verse, self.edition.value)).json()
-            return [data['data']['text']]
-        else:
-            data = request(verse).json()
-            ayahs = data['data'][0]['ayahs']
-            if not isinstance(ayahs, list):
-                raise IncorrectAyahArguments(ayahs)
-            else:
-                to_return = list()
-                for ayah in ayahs:
-                    to_return.append(ayah['text'])
-            return to_return
+            return [self.str_verses[verse-1]]
 
 
 
