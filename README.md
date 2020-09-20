@@ -74,6 +74,7 @@ print(results.verses)
 [In the past We granted to Moses and Aaron the criterion (for judgment), and a Light and a Message for those who would do right,-, Before this We wrote in the Psalms, after the Message (given to Moses): My servants the righteous, shall inherit the earth."]
 ```
 
-For more information, [read the documentation](https://www.youtube.com/watch?v=oHg5SJYRHA0)
+For more information, [read the documentation.](https://www.youtube.com/watch?v=oHg5SJYRHA0)
+See ['test.py'](https://github.com/niztg/quranpy/blob/master/test.py) for more in depth examples and ways to use the lib.
 
 Assalamwalaikum warahmatullahi wa barakatuhu!
