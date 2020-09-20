@@ -1,3 +1,8 @@
+"""
+﷽
+Alhamdulillah.
+"""
+
 from .enums import *
 from .exceptions import SurahNotFound, IncorrectAyahArguments, IncorrectPageNumber, IncorrectJuzNumber, SearchError
 from requests import get as request
