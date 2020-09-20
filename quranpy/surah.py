@@ -3,7 +3,7 @@ from .exceptions import SurahNotFound, IncorrectAyahArguments, IncorrectPageNumb
 from requests import get as request
 from typing import Optional, List, Union
 
-__all__ = ('Surah', 'Verse', 'Page', 'Juz', 'Search')
+__all__ = ('Surah', 'Verse', 'Page', 'Juz', 'Search', 'show_verses')
 
 _URL = "http://api.alquran.cloud/v1/{0}/{1}/{2}"
 SEARCH_URL = "http://api.alquran.cloud/v1/search/{0}/{1}/{2}"
@@ -11,7 +11,9 @@ SURAH_URL = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}"
 
 
 class Surah:
-    __slots__ = ('data', 'edition', 'chapter', 'number', 'arabic_name', 'name', 'translation', 'period', 'num_verses', 'str_verses')
+    __slots__ = (
+        'data', 'edition', 'chapter', 'number', 'arabic_name', 'name', 'translation', 'period', 'num_verses',
+        'str_verses')
 
     def __init__(
             self,
@@ -75,7 +77,7 @@ class Surah:
                     if offset > limit:
                         offset = limit
                         limit = offset
-                    for x in range(offset, limit+1):
+                    for x in range(offset, limit + 1):
                         try:
                             verse.append(Verse(f"{self.chapter}:{x}", self.edition))
                         except:
@@ -107,15 +109,14 @@ class Surah:
                         offset, limit = list(map(int, _range))
                     except ValueError:
                         raise IncorrectAyahArguments("You may not use any words to define your ayah!") from ValueError
-                    return list(self.str_verses[offset-1:limit])
+                    return list(self.str_verses[offset - 1:limit])
             else:
                 try:
-                    return [self.str_verses[int(ayah)-1]]
+                    return [self.str_verses[int(ayah) - 1]]
                 except Exception as error:
-                    raise IncorrectAyahArguments() from error
+                    raise IncorrectAyahArguments("You may not use any words to define your ayah!") from error
         if isinstance(verse, int):
-            return [self.str_verses[verse-1]]
-
+            return [self.str_verses[verse - 1]]
 
 
 class Verse:
@@ -255,52 +256,22 @@ def show_verses(
         ayah: Union[int, str],
         edition: Optional[Editions] = Editions.sahih_international
 ):
-    # this doesn't return a list of the Verse object, it just returns text
-    # good for when you just want the verse and nothing else
-    try:
-        verse = int(ayah)
-        if (verse < 1) or (verse > 6236):
-            raise IncorrectAyahArguments("Ayah must be inbetween 1 and 6236")
-    except:
-        _data = ayah.split(":")
-        if len(_data) != 2:
-            raise IncorrectAyahArguments(
-                "Please enter your ayahs in the following format: 2:255 (For Surah Baqarah verse 255)"
-            )
-        _range = _data[1].split("-")
-        if len(_range) != 1:
-            if len(_range) != 2:
-                raise IncorrectAyahArguments(
-                    "Please enter your ayahs in the following format: 1:1-4 (For verses 1-4 of Surah Fatiha)"
-                )
-            else:
-                try:
-                    offset, limit = list(map(int, _range))
-                except ValueError:
-                    raise IncorrectAyahArguments("You may not use any words to define your ayah!") from ValueError
-                if offset > limit:
-                    offset = limit
-                    limit = offset
-                verse = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}?offset={2}&limit={3}".format(_data[0],
-                                                                                                         edition.value,
-                                                                                                         offset - 1,
-                                                                                                         limit)
-        else:
-            verse = f"{_data[0]}:{_data[1]}"
-    if isinstance(verse, int) or check_format(verse):
-        data = request(_URL.format('ayah', verse, edition.value)).json()
-        return [data['data']['text']]
+    if isinstance(ayah, int) or ayah.isdigit():
+        try:
+            return [Verse(ayah, edition).text]
+        except Exception as error:
+            raise error
     else:
-        data = request(verse).json()
-        ayahs = data['data'][0]['ayahs']
-        if not isinstance(ayahs, list):
-            raise IncorrectAyahArguments(ayahs)
-        else:
-            to_return = list()
-            for ayah in ayahs:
-                to_return.append(ayah['text'])
-        return to_return
-
-
-def check_format(text: str) -> bool:
-    return len(text.split(":")) == 2 and not text.startswith("http")
+        try:
+            surah, verses = ayah.split(":")
+        except ValueError:
+            raise IncorrectAyahArguments(
+                "Please enter your verses in the following format: 2:225 (For Surah Baqarah verse 255)") from ValueError
+        try:
+            surah = int(surah)
+        except:
+            raise IncorrectAyahArguments("You may not use any words to define your verse")
+        try:
+            return list(Surah(int(surah), edition).show_str_verses(verses))
+        except Exception as error:
+            raise error
