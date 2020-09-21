@@ -77,6 +77,4 @@ f"""
 
 
 if __name__ == '__main__':
-    print(get_v("5:110-120"))
-
-print(quranpy.Surah(1).show_str_verses("1-5"))
+    print(get_v("1:1-7"))

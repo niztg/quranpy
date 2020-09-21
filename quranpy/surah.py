@@ -64,8 +64,8 @@ class Surah:
     ):
         try:
             verse = int(ayah)
-            if (verse < 1) or (verse > 6236):
-                raise IncorrectAyahArguments("Ayah must be inbetween 1 and 6236")
+            if (verse < 1) or (verse > len(self.str_verses)):
+                raise IncorrectAyahArguments("Ayah must be inbetween 1 and %s" % len(self.str_verses))
         except:
             _range = ayah.split("-")
             if len(_range) != 1:
