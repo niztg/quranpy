@@ -113,13 +113,23 @@ class Surah:
                     try:
                         offset, limit = list(map(int, _range))
                     except ValueError:
-                        raise IncorrectAyahArguments("You may not use any words to define your ayah!") from ValueError
-                    return list(self.str_verses[offset - 1:limit])
+                        raise IncorrectAyahArguments("You may not use any words or special characters to define your "
+                                                     "ayah other than -.") from ValueError
+                    _return = list(self.str_verses[offset - 1:limit])
+                    if not _return:
+                        raise IncorrectAyahArguments(f"Verse {self.chapter}:{offset} does not exist!")
+                    return _return
             else:
                 try:
                     return [self.str_verses[int(ayah) - 1]]
                 except Exception as error:
-                    raise IncorrectAyahArguments("You may not use any words to define your ayah!") from error
+                    if isinstance(error, IndexError):
+                        raise IncorrectAyahArguments(f"Verse {self.chapter}:{int(ayah)} does not exist!")
+                    elif isinstance(error, ValueError):
+                        raise IncorrectAyahArguments("You may not use any words or special characters to represent "
+                                                     "your verses other than -.")
+                    else:
+                        raise error
         if isinstance(verse, int):
             return [self.str_verses[verse - 1]]
 
