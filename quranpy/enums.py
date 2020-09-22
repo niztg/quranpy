@@ -16,14 +16,14 @@ class Chapters(Enum):
     yunus = 10
     hud = 11
     yusuf = 12
-    rad = 13
+    raad = 13
     ibrahim = 14
     hijr = 15
     nahl = 16
     israa = 17
     kahf = 18
     maryam = 19
-    taha = 20
+    taahaa = 20
     anbiyaa = 21
     hajj = 22
     muminun = 23
@@ -32,7 +32,7 @@ class Chapters(Enum):
     shuara = 26
     naml = 27
     qasas = 28
-    ankabut = 29
+    ankaboot = 29
     rum = 30
     luqman = 31
     sajda = 32
@@ -67,7 +67,7 @@ class Chapters(Enum):
     saff = 61
     jumuah = 62
     munafiqoon = 63
-    taghabun = 64
+    taghaboon = 64
     talaq = 65
     tahrim = 66
     mulk = 67
@@ -81,7 +81,7 @@ class Chapters(Enum):
     qiyamah = 75
     insaan = 76
     mursalaat = 77
-    naba = 78
+    nabaa = 78
     naziaat = 79
     abasa = 80
     takwir = 81
@@ -98,7 +98,7 @@ class Chapters(Enum):
     layl = 92
     duhaa = 93
     sharh = 94
-    teen = 95
+    tin = 95
     alaq = 96
     qadr = 97
     bayyinah = 98
@@ -108,7 +108,7 @@ class Chapters(Enum):
     takathur = 102
     asr = 103
     humazah = 104
-    feel = 105
+    fil = 105
     quraysh = 106
     maaoon = 107
     kawthar = 108

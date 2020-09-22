@@ -251,7 +251,9 @@ class Search:
 
     def __repr__(self):
         if self._surah:
-            return f"{self.count} count(s) of \"{self.term}\" in Surah {self.data['matches'][0]['surah']['englishName']} (in this edition)"
+            return f"{self.count} count(s) of \"{self.term}\" in" \
+                   f" Surah {self.data['matches'][0]['surah']['englishName']}" \
+                   f" (in this edition)"
         else:
             return f"{self.count} count(s) of \"{self.term}\" in the Qur'an (in this edition)"
 
@@ -270,10 +272,10 @@ class Search:
 def show_verses(
         ayah: Union[int, str],
         edition: Optional[Editions] = Editions.sahih_international
-):
+) -> List[str]:
     if isinstance(ayah, int) or ayah.isdigit():
         try:
-            return [Verse(ayah, edition).text]
+            return [str(Verse(ayah, edition))]
         except Exception as error:
             raise error
     else:

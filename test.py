@@ -75,6 +75,5 @@ f"""
         except Exception as error:
             raise error
 
-
 if __name__ == '__main__':
     print(get_v("1:1-7"))
