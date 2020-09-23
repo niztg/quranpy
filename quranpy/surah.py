@@ -4,7 +4,7 @@ Alhamdulillah.
 """
 from .enums import *
 from .exceptions import SurahNotFound, IncorrectAyahArguments, IncorrectPageNumber, IncorrectJuzNumber, SearchError
-from .edition_info import data as edition_data
+from .dict_data import data as edition_data, LANGUAGES
 from requests import get as request
 from typing import Optional, List, Union, Iterable
 
@@ -285,7 +285,20 @@ class EditionInfo:
         self.identifier = data.get('identifier')
         self.format = data.get('format')
         self.type = data.get('type')
-        self.direction = data.get('direction')
+        self.language = (LANGUAGES.get(data.get('language')) or data.get('language')).capitalize()
+        if data.get('direction'):
+            self.direction = " ".join(
+                list(data.get('direction'))).\
+                replace("l", "Left").\
+                replace("r", "Right").\
+                replace(" t ", " to ")
+        else:
+            self.direction = None
+
+    def __repr__(self):
+        return f"{self.english_name or self.name} Quran Edition (Indicator={self.identifier}, " \
+               f"Language={self.language}, " \
+               f"Direction={self.direction})"
 
     def __enter__(self):
         return self

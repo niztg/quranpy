@@ -8,6 +8,7 @@ import quranpy
 
 with quranpy.EditionInfo(quranpy.Editions.sahih_international) as e:
     print(e.verse(262))
+print(e)
 
 print(quranpy.EditionInfo(quranpy.Editions.yusufali).english_name)
 
