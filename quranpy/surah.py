@@ -15,10 +15,7 @@ from .exceptions import (
     SearchError
 )
 
-from .dict_data import (
-    data as edition_data,
-    LANGUAGES
-)
+from .dict_data import LANGUAGES
 from requests import get as request
 
 from typing import (
@@ -349,11 +346,12 @@ class EditionInfo:
 
     def __init__(
             self,
-            __e: Editions
+            edition: Editions
     ):
-        index = [e['identifier'] for e in edition_data].index(__e.value)
-        data = edition_data[index]
-        self.usable = __e
+        edition_data = request("http://api.alquran.cloud/v1/edition").json()
+        index = [e['identifier'] for e in edition_data['data']].index(edition.value)
+        data = edition_data['data'][index]
+        self.usable = edition
         self.english_name = data.get('englishName')
         self.name = data.get('name')
         self.identifier = data.get('identifier')
