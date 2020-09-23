@@ -8,7 +8,7 @@ from .edition_info import data as edition_data
 from requests import get as request
 from typing import Optional, List, Union, Iterable
 
-__all__ = ('Surah', 'Verse', 'Page', 'Juz', 'Search', 'show_verses')
+__all__ = ('Surah', 'Verse', 'Page', 'Juz', 'Search', 'EditionInfo', 'show_verses')
 
 _URL = "http://api.alquran.cloud/v1/{0}/{1}/{2}"
 SEARCH_URL = "http://api.alquran.cloud/v1/search/{0}/{1}/{2}"
@@ -22,7 +22,7 @@ class Surah:
 
     def __init__(
             self,
-            chapter: Union[Union[int, str], Chapters],
+            chapter: Union[int, str, Chapters],
             edition: Optional[Editions] = Editions.sahih_international
     ):
         if isinstance(chapter, (int, str)):
@@ -233,7 +233,7 @@ class Search:
     def __init__(
             self,
             term: str,
-            surah: Optional[Union[Union[int, str], Chapters]] = None,
+            surah: Optional[Union[int, str, Chapters]] = None,
             edition: Optional[Editions] = Editions.sahih_international
     ):
         self._surah = surah
@@ -295,7 +295,7 @@ class EditionInfo:
 
     def surah(
             self,
-            chapter: Union[Union[int, str], Chapters]
+            chapter: Union[int, str, Chapters]
     ) -> Surah:
         return Surah(chapter, self.usable)
 
@@ -335,9 +335,3 @@ def show_verses(
         except:
             raise IncorrectAyahArguments("You may not use any words to define your verse")
         return list(Surah(int(surah), edition).show_str_verses(verses))
-
-
-def edition(
-        edition: Editions
-) -> EditionInfo:
-    return EditionInfo(edition)
