@@ -9,6 +9,8 @@ import quranpy
 with quranpy.edition(quranpy.Editions.sahih_international) as e:
     print(e.verse(262))
 
+print(quranpy.edition(quranpy.Editions.yusufali).english_name)
+
 results = quranpy.Search(
     term="Moses",
     surah=quranpy.Chapters.anbiyaa,
