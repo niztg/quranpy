@@ -1,4 +1,4 @@
-from .surah import Surah, Verse, Juz, Page, Search, show_verses, EditionInfo
+from .surah import Surah, Verse, Juz, Page, Search, EditionInfo, show_verses
 from .exceptions import *
 from .enums import *
 
