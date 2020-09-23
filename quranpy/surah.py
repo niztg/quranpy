@@ -2,11 +2,11 @@
 ﷽
 Alhamdulillah.
 """
-
 from .enums import *
 from .exceptions import SurahNotFound, IncorrectAyahArguments, IncorrectPageNumber, IncorrectJuzNumber, SearchError
+from .edition_info import data as edition_data
 from requests import get as request
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Iterable
 
 __all__ = ('Surah', 'Verse', 'Page', 'Juz', 'Search', 'show_verses')
 
@@ -22,10 +22,11 @@ class Surah:
 
     def __init__(
             self,
-            chapter: Union[int, Chapters],
+            chapter: Union[Union[int, str], Chapters],
             edition: Optional[Editions] = Editions.sahih_international
     ):
-        if isinstance(chapter, int):
+        if isinstance(chapter, (int, str)):
+            chapter = int(chapter)
             if (chapter > 114) or (chapter < 1):
                 raise SurahNotFound(
                     "%s is not a chapter number in the Qur'an. The number must be inbetween 1 and 114" % chapter)
@@ -47,11 +48,11 @@ class Surah:
     def __repr__(self):
         return f"Surah {self.name} - {self.translation}"
 
-    def __iter__(self):
-        return iter(self.verses)
+    def __iter__(self) -> Iterable:
+        return iter(list(self.verses))
 
     @property
-    def verses(self):
+    def verses(self) -> List:
         ayahs = list()
         for ayah in self.data.get('ayahs'):
             verse = ayah['number']
@@ -61,7 +62,7 @@ class Surah:
     def show_verses(
             self,
             ayah: Union[int, str],
-    ):
+    ) -> List:
         try:
             verse = int(ayah)
             if (verse < 1) or (verse > len(self.str_verses)):
@@ -134,48 +135,15 @@ class Surah:
             return [self.str_verses[verse - 1]]
 
 
-class Verse:
-    __slots__ = ('data', 'edition', 'number', 'text', 'number_in_surah', 'position')
-
-    def __init__(
-            self,
-            ayah,
-            edition: Optional[Editions] = Editions.sahih_international
-    ):
-        data = request(_URL.format('ayah', ayah, edition.value)).json()
-        if data.get('code') != 200:
-            raise IncorrectAyahArguments(f"Verse {ayah} of the quran does not exist!")
-        self.data = data['data']
-        self.edition = edition
-        self.number = self.data.get('number')
-        self.text = self.data.get('text')
-        self.number_in_surah = self.data.get('numberInSurah')
-        self.position = f"{self.data['surah']['number']}:{self.number_in_surah}"
-
-    def __repr__(self):
-        return self.text
-
-    @property
-    def surah(self) -> Surah:
-        return Surah(self.data['surah']['number'], self.edition)
-
-    @property
-    def juz(self):
-        return Juz(self.data['juz'], self.edition)
-
-    @property
-    def page(self):
-        return Page(self.data['page'], self.edition)
-
-
 class Page:
     __slots__ = ('edition', 'data', 'number', 'num_verses', 'num_surahs')
 
     def __init__(
             self,
-            page: int,
+            page: Union[int, str],
             edition: Optional[Editions] = Editions.sahih_international
     ):
+        page = int(page)
         if page > 604:
             raise IncorrectPageNumber("Page number should be betwen 1 and 604")
         data = request(_URL.format('page', page, edition.value)).json()
@@ -201,9 +169,10 @@ class Juz:
 
     def __init__(
             self,
-            number: int,
+            number: Union[int, str],
             edition: Optional[Editions] = Editions.sahih_international
     ):
+        number = int(number)
         if (number > 30) or (number < 1):
             raise IncorrectJuzNumber("Juz number should be inbetween 1 and 30.")
         data = request(_URL.format('juz', number, edition.value)).json()
@@ -224,13 +193,47 @@ class Juz:
         return to_return
 
 
+class Verse:
+    __slots__ = ('data', 'edition', 'number', 'text', 'number_in_surah', 'position')
+
+    def __init__(
+            self,
+            ayah: Union[int, str],
+            edition: Optional[Editions] = Editions.sahih_international
+    ):
+        data = request(_URL.format('ayah', ayah, edition.value)).json()
+        if data.get('code') != 200:
+            raise IncorrectAyahArguments(f"Verse {ayah} of the quran does not exist!")
+        self.data = data['data']
+        self.edition = edition
+        self.number = self.data.get('number')
+        self.text = self.data.get('text')
+        self.number_in_surah = self.data.get('numberInSurah')
+        self.position = f"{self.data['surah']['number']}:{self.number_in_surah}"
+
+    def __repr__(self) -> str:
+        return self.text
+
+    @property
+    def surah(self) -> Surah:
+        return Surah(self.data['surah']['number'], self.edition)
+
+    @property
+    def juz(self) -> Juz:
+        return Juz(self.data['juz'], self.edition)
+
+    @property
+    def page(self) -> Page:
+        return Page(self.data['page'], self.edition)
+
+
 class Search:
     __slots__ = ('_surah', 'term', 'edition', 'data', 'count', 'str_verses')
 
     def __init__(
             self,
             term: str,
-            surah: Optional[Union[int, Chapters]] = None,
+            surah: Optional[Union[Union[int, str], Chapters]] = None,
             edition: Optional[Editions] = Editions.sahih_international
     ):
         self._surah = surah
@@ -269,15 +272,58 @@ class Search:
         return ayahs
 
 
+class EditionInfo:
+    def __init__(
+            self,
+            __e: Editions
+    ):
+        index = [e['identifier'] for e in edition_data].index(__e.value)
+        data = edition_data[index]
+        self.usable = __e
+        self.english_name = data.get('englishName')
+        self.name = data.get('name')
+        self.identifier = data.get('identifier')
+        self.format = data.get('format')
+        self.type = data.get('type')
+        self.direction = data.get('direction')
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return
+
+    def surah(
+            self,
+            chapter: Union[Union[int, str], Chapters]
+    ) -> Surah:
+        return Surah(chapter, self.usable)
+
+    def verse(
+            self,
+            verse: Union[int, str]
+    ) -> Verse:
+        return Verse(verse, self.usable)
+
+    def page(
+            self,
+            page: Union[int, str]
+    ) -> Page:
+        return Page(page, self.usable)
+
+    def juz(
+            self,
+            juz: Union[int, str]
+    ) -> Juz:
+        return Juz(juz, self.usable)
+
+
 def show_verses(
         ayah: Union[int, str],
         edition: Optional[Editions] = Editions.sahih_international
 ) -> List[str]:
     if isinstance(ayah, int) or ayah.isdigit():
-        try:
-            return [str(Verse(ayah, edition))]
-        except Exception as error:
-            raise error
+        return [str(Verse(ayah, edition))]
     else:
         try:
             surah, verses = ayah.split(":")
@@ -288,7 +334,10 @@ def show_verses(
             surah = int(surah)
         except:
             raise IncorrectAyahArguments("You may not use any words to define your verse")
-        try:
-            return list(Surah(int(surah), edition).show_str_verses(verses))
-        except Exception as error:
-            raise error
+        return list(Surah(int(surah), edition).show_str_verses(verses))
+
+
+def edition(
+        edition: Editions
+) -> EditionInfo:
+    return EditionInfo(edition)
