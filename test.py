@@ -6,7 +6,7 @@ Play around with it!
 import quranpy
 
 
-with quranpy.EditionInfo(quranpy.Editions.sahih_international) as e:
+with quranpy.EditionInfo(quranpy.Editions.korean) as e:
     print(e.verse(262))
 print(e)
 
