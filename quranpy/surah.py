@@ -299,7 +299,8 @@ class Search:
             surah: Optional[Union[int, str, Chapters]] = None,
             edition: Optional[Editions] = Editions.sahih_international
     ):
-        if not surah:
+        self._surah = surah
+        if not self._surah:
             surah = "all"
         else:
             if isinstance(surah, Chapters):
@@ -369,7 +370,8 @@ class EditionInfo:
             self.direction = None
 
     def __repr__(self):
-        return f"{self.english_name or self.name} Quran Edition (Indicator={self.identifier}, " \
+        return f"{self.name if self.english_name == 'Unknown' else self.english_name} " \
+               f"Quran Edition (Indicator={self.identifier}, " \
                f"Language={self.language}, " \
                f"Direction={self.direction})"
 
