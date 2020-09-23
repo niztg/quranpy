@@ -2,27 +2,24 @@
 ﷽
 Alhamdulillah.
 """
+from typing import (
+    Optional,
+    List,
+    Union,
+    Iterable
+)
+from requests import get as request
+from .dict_data import LANGUAGES
 from .enums import (
     Editions,
     Chapters
 )
-
 from .exceptions import (
     SurahNotFound,
     IncorrectAyahArguments,
     IncorrectPageNumber,
     IncorrectJuzNumber,
     SearchError
-)
-
-from .dict_data import LANGUAGES
-from requests import get as request
-
-from typing import (
-    Optional,
-    List,
-    Union,
-    Iterable
 )
 
 __all__ = (
