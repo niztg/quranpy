@@ -10,8 +10,6 @@ with quranpy.EditionInfo(quranpy.Editions.korean) as e:
     print(e.verse(262))
 print(e)
 
-print(quranpy.EditionInfo(quranpy.Editions.yusufali).english_name)
-
 results = quranpy.Search(
     term="Moses",
     surah=quranpy.Chapters.anbiyaa,

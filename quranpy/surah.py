@@ -2,18 +2,13 @@
 ﷽
 Alhamdulillah.
 """
-from typing import (
-    Optional,
-    List,
-    Union,
-    Iterable
-)
+
+from typing import Optional, List, Union, Iterable, Dict
 from requests import get as request
+from json import load
+
 from .dict_data import LANGUAGES
-from .enums import (
-    Editions,
-    Chapters
-)
+from .enums import Editions, Chapters
 from .exceptions import (
     SurahNotFound,
     IncorrectAyahArguments,
@@ -79,11 +74,15 @@ class Surah:
     def __repr__(self):
         return f"Surah {self.name} - {self.translation}"
 
-    def __iter__(self) -> Iterable:
+    def __iter__(
+            self
+    ) -> Iterable:
         return iter(list(self.verses))
 
     @property
-    def verses(self) -> List:
+    def verses(
+            self
+    ) -> List:
         ayahs = list()
         for ayah in self.data.get('ayahs'):
             verse = ayah['number']
@@ -129,7 +128,7 @@ class Surah:
     def show_str_verses(
             self,
             ayah: Union[int, str],
-    ):
+    ) -> List[str]:
         try:
             verse = int(ayah)
             if (verse < 1) or (verse > len(self.str_verses)):
@@ -231,8 +230,8 @@ class Juz:
     @property
     def surahs(self) -> List[Surah]:
         to_return = list()
-        for surah in self.data.get('surahs').values():
-            to_return.append(Surah(surah['number'], self.edition))
+        for surah in self.data.get('surahs').keys():
+            to_return.append(Surah(surah, self.edition))
         return to_return
 
 
@@ -243,7 +242,8 @@ class Verse:
         'number',
         'text',
         'number_in_surah',
-        'position'
+        'position',
+        'is_sajda'
     )
 
     def __init__(
@@ -260,6 +260,7 @@ class Verse:
         self.text = self.data.get('text')
         self.number_in_surah = self.data.get('numberInSurah')
         self.position = f"{self.data['surah']['number']}:{self.number_in_surah}"
+        self.is_sajda = self.data.get('sajda')
 
     def __repr__(self) -> str:
         return self.text
@@ -345,9 +346,10 @@ class EditionInfo:
             self,
             edition: Editions
     ):
-        edition_data = request("http://api.alquran.cloud/v1/edition").json()
-        index = [e['identifier'] for e in edition_data['data']].index(edition.value)
-        data = edition_data['data'][index]
+        with open("quranpy/editions.json") as f:
+            edition_data: List[Dict[str, str]] = load(f)
+        index = [e['identifier'] for e in edition_data].index(edition.value)
+        data = edition_data[index]
         self.usable = edition
         self.english_name = data.get('englishName')
         self.name = data.get('name')
