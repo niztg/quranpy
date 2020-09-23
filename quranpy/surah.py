@@ -2,13 +2,41 @@
 ﷽
 Alhamdulillah.
 """
-from .enums import *
-from .exceptions import SurahNotFound, IncorrectAyahArguments, IncorrectPageNumber, IncorrectJuzNumber, SearchError
-from .dict_data import data as edition_data, LANGUAGES
-from requests import get as request
-from typing import Optional, List, Union, Iterable
+from .enums import (
+    Editions,
+    Chapters
+)
 
-__all__ = ('Surah', 'Verse', 'Page', 'Juz', 'Search', 'EditionInfo', 'show_verses')
+from .exceptions import (
+    SurahNotFound,
+    IncorrectAyahArguments,
+    IncorrectPageNumber,
+    IncorrectJuzNumber,
+    SearchError
+)
+
+from .dict_data import (
+    data as edition_data,
+    LANGUAGES
+)
+from requests import get as request
+
+from typing import (
+    Optional,
+    List,
+    Union,
+    Iterable
+)
+
+__all__ = (
+    'Surah',
+    'Verse',
+    'Page',
+    'Juz',
+    'Search',
+    'EditionInfo',
+    'show_verses'
+)
 
 _URL = "http://api.alquran.cloud/v1/{0}/{1}/{2}"
 SEARCH_URL = "http://api.alquran.cloud/v1/search/{0}/{1}/{2}"
@@ -17,8 +45,17 @@ SURAH_URL = "http://api.alquran.cloud/v1/surah/{0}/editions/{1}"
 
 class Surah:
     __slots__ = (
-        'data', 'edition', 'chapter', 'number', 'arabic_name', 'name', 'translation', 'period', 'num_verses',
-        'str_verses')
+        'data',
+        'edition',
+        'chapter',
+        'number',
+        'arabic_name',
+        'name',
+        'translation',
+        'period',
+        'num_verses',
+        'str_verses'
+    )
 
     def __init__(
             self,
@@ -136,7 +173,13 @@ class Surah:
 
 
 class Page:
-    __slots__ = ('edition', 'data', 'number', 'num_verses', 'num_surahs')
+    __slots__ = (
+        'edition',
+        'data',
+        'number',
+        'num_verses',
+        'num_surahs'
+    )
 
     def __init__(
             self,
@@ -165,7 +208,13 @@ class Page:
 
 
 class Juz:
-    __slots__ = ('edition', 'data', 'number', 'num_ayahs', 'num_surahs')
+    __slots__ = (
+        'edition',
+        'data',
+        'number',
+        'num_ayahs',
+        'num_surahs'
+    )
 
     def __init__(
             self,
@@ -194,7 +243,14 @@ class Juz:
 
 
 class Verse:
-    __slots__ = ('data', 'edition', 'number', 'text', 'number_in_surah', 'position')
+    __slots__ = (
+        'data',
+        'edition',
+        'number',
+        'text',
+        'number_in_surah',
+        'position'
+    )
 
     def __init__(
             self,
@@ -228,7 +284,14 @@ class Verse:
 
 
 class Search:
-    __slots__ = ('_surah', 'term', 'edition', 'data', 'count', 'str_verses')
+    __slots__ = (
+        '_surah',
+        'term',
+        'edition',
+        'data',
+        'count',
+        'str_verses'
+    )
 
     def __init__(
             self,
@@ -236,7 +299,6 @@ class Search:
             surah: Optional[Union[int, str, Chapters]] = None,
             edition: Optional[Editions] = Editions.sahih_international
     ):
-        self._surah = surah
         if not surah:
             surah = "all"
         else:
@@ -273,6 +335,17 @@ class Search:
 
 
 class EditionInfo:
+    __slots__ = (
+        'usable',
+        'english_name',
+        'name',
+        'identifier',
+        'format',
+        'type',
+        'language',
+        'direction'
+    )
+
     def __init__(
             self,
             __e: Editions
@@ -288,9 +361,9 @@ class EditionInfo:
         self.language = (LANGUAGES.get(data.get('language')) or data.get('language')).capitalize()
         if data.get('direction'):
             self.direction = " ".join(
-                list(data.get('direction'))).\
-                replace("l", "Left").\
-                replace("r", "Right").\
+                list(data.get('direction'))). \
+                replace("l", "Left"). \
+                replace("r", "Right"). \
                 replace(" t ", " to ")
         else:
             self.direction = None
