@@ -1,5 +1,4 @@
 from enum import Enum
-
 __all__ = ('Chapters', 'Editions')
 
 
@@ -259,3 +258,4 @@ class Editions(Enum):
     wordbyword2 =   "quran-wordbyword-2"
     arabic =        "quran-unicode"
     uthmani_quran_academy = "quran-uthmani-quran-academy"
+
