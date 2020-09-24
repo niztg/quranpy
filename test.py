@@ -29,9 +29,7 @@ print("\n".join(list(map(str, Anfal.show_verses("1-5")))))
 print("_____________________________________")
 print(quranpy.__author__)
 print("_____________________________________")
-print("\n".join(quranpy.Search(
-    "Torah"
-).str_verses))
+print(quranpy.Search("Torah").verses[12].position)
 print(quranpy.Surah(29).show_str_verses("28-29"))
 
 

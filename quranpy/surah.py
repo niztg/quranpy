@@ -3,7 +3,7 @@
 Alhamdulillah.
 """
 
-from typing import Optional, List, Union, Iterable, Dict
+from typing import Optional, List, Union, Iterable
 from requests import get as request
 from json import load
 
@@ -346,8 +346,7 @@ class EditionInfo:
             self,
             edition: Editions
     ):
-        with open("quranpy/editions.json") as f:
-            edition_data: List[Dict[str, str]] = load(f)
+        edition_data = load(open("quranpy/editions.json"))
         index = [e['identifier'] for e in edition_data].index(edition.value)
         data = edition_data[index]
         self.usable = edition
