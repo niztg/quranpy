@@ -164,6 +164,18 @@ class Surah:
         if isinstance(verse, int):
             return [self.str_verses[verse - 1]]
 
+    def get_verses(
+            self,
+            *verses
+    ):
+        return list(map(self.show_verses, list(verses)))
+
+    def get_str_verses(
+            self,
+            *verses
+    ):
+        return list(map(self.show_str_verses, list(verses)))
+
 
 class Page:
     __slots__ = (
@@ -318,6 +330,9 @@ class Search:
         else:
             return f"{self.count} count(s) of \"{self.term}\" in the Qur'an (in this edition)"
 
+    def __iter__(self) -> Iterable:
+        return iter(list(self.verses))
+
     @property
     def verses(self) -> List[Verse]:
         ayahs = list()
@@ -327,7 +342,7 @@ class Search:
                 ayahs.append(Verse(verse, self.edition))
             except:
                 break
-        return ayahs
+        return sorted(ayahs, key=lambda x: x.number)
 
 
 class EditionInfo:

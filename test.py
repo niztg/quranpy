@@ -5,7 +5,6 @@ Play around with it!
 
 import quranpy
 
-
 with quranpy.EditionInfo(quranpy.Editions.korean) as e:
     print(e.verse(262))
 print(e)
@@ -29,7 +28,6 @@ print("\n".join(list(map(str, Anfal.show_verses("1-5")))))
 print("_____________________________________")
 print(quranpy.__author__)
 print("_____________________________________")
-print(quranpy.Search("Torah").verses[12].position)
 print(quranpy.Surah(29).show_str_verses("28-29"))
 
 
@@ -60,7 +58,7 @@ def get_v(ayah, edition=quranpy.Editions.sahih_international):
             surah = int(surah)
         except:
             raise quranpy.IncorrectAyahArguments("You may not use any words to define your verse")
-        try:
+        finally:
             surah = quranpy.Surah(int(surah))
             _verses = list(surah.show_str_verses(verses))
             msg = f"{surah.arabic_name} | {surah.__str__()}"
@@ -75,9 +73,8 @@ def get_v(ayah, edition=quranpy.Editions.sahih_international):
                 msg += f"\n\n{surah.period}"
                 return msg
 
-        except Exception as error:
-            raise error
 
+print(quranpy.Surah(5).get_str_verses('72', '110-120'))
 
 if __name__ == '__main__':
     print(get_v("5:72", quranpy.Editions.kids))
