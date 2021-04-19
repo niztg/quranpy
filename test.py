@@ -8,9 +8,6 @@ import quranpy
 ama = quranpy.Juz(30)
 print(ama)
 
-# with quranpy.EditionInfo(quranpy.Editions.korean) as e:
-#     print(e.verse(262))
-# print(e)
 #
 # print([v.position for v in quranpy.Search("abraham")])
 # print("_____________________________________")

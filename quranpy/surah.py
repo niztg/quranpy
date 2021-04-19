@@ -5,9 +5,7 @@ Alhamdulillah.
 
 from typing import Optional, List, Union, Iterable
 from requests import get as request
-from json import load
 
-from .dict_data import LANGUAGES
 from .enums import Editions, Chapters
 from .exceptions import (
     SurahNotFound,
@@ -23,7 +21,6 @@ __all__ = (
     'Page',
     'Juz',
     'Search',
-    'EditionInfo',
     'show_verses',
     'Ayah',
     'Chapter'
@@ -345,78 +342,6 @@ class Search:
             except:
                 break
         return sorted(ayahs, key=lambda x: x.number)
-
-
-class EditionInfo:
-    __slots__ = (
-        'usable',
-        'english_name',
-        'name',
-        'identifier',
-        'format',
-        'type',
-        'language',
-        'direction'
-    )
-
-    def __init__(
-            self,
-            edition: Editions
-    ):
-        edition_data = load(open("quranpy/editions.json"))
-        index = [e['identifier'] for e in edition_data].index(edition.value)
-        data = edition_data[index]
-        self.usable = edition
-        self.english_name = data.get('englishName')
-        self.name = data.get('name')
-        self.identifier = data.get('identifier')
-        self.format = data.get('format')
-        self.type = data.get('type')
-        self.language = (LANGUAGES.get(data.get('language')) or data.get('language')).capitalize()
-        if data.get('direction'):
-            self.direction = " ".join(
-                list(data.get('direction'))). \
-                replace("t", "to"). \
-                replace("l", "Left"). \
-                replace("r", "Right")
-        else:
-            self.direction = None
-
-    def __repr__(self):
-        return f"{self.name if self.english_name == 'Unknown' else self.english_name} " \
-               f"Quran Edition (Indicator={self.identifier}, " \
-               f"Language={self.language}, " \
-               f"Direction={self.direction})"
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        return
-
-    def surah(
-            self,
-            chapter: Union[int, str, Chapters]
-    ) -> Surah:
-        return Surah(chapter, self.usable)
-
-    def verse(
-            self,
-            verse: Union[int, str]
-    ) -> Verse:
-        return Verse(verse, self.usable)
-
-    def page(
-            self,
-            page: Union[int, str]
-    ) -> Page:
-        return Page(page, self.usable)
-
-    def juz(
-            self,
-            juz: Union[int, str]
-    ) -> Juz:
-        return Juz(juz, self.usable)
 
 
 def show_verses(
