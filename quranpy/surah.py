@@ -24,7 +24,9 @@ __all__ = (
     'Juz',
     'Search',
     'EditionInfo',
-    'show_verses'
+    'show_verses',
+    'Ayah',
+    'Chapter'
 )
 
 _URL = "http://api.alquran.cloud/v1/{0}/{1}/{2}"
@@ -72,7 +74,7 @@ class Surah:
         self.str_verses = [verse['text'] for verse in self.data.get('ayahs')]
 
     def __repr__(self):
-        return f"Surah {self.name} - {self.translation}"
+        return f"Surah {self.name} ({self.translation})"
 
     def __iter__(
             self
@@ -374,9 +376,9 @@ class EditionInfo:
         if data.get('direction'):
             self.direction = " ".join(
                 list(data.get('direction'))). \
+                replace("t", "to"). \
                 replace("l", "Left"). \
-                replace("r", "Right"). \
-                replace(" t ", " to ")
+                replace("r", "Right")
         else:
             self.direction = None
 
@@ -434,3 +436,11 @@ def show_verses(
         except:
             raise IncorrectAyahArguments("You may not use any words to define your verse")
         return list(Surah(int(surah), edition).show_str_verses(verses))
+
+
+class Ayah(Verse):
+    pass
+
+
+class Chapter(Surah):
+    pass
