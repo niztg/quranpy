@@ -4,7 +4,7 @@ setup(
     name='quranpy',
     author='nizcomix',
     url='https://github.com/niztg/quranpy',
-    version='1.0',
+    version='1.1',
     license='MIT',
     description='Python Package to interact with the glorious Qu\'ran',
     long_description=open("README.md").read(),
